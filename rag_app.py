@@ -55,3 +55,9 @@ def format_docs(docs):
                     | prompt
                         | llm
                         )
+
+user_question = "What days can I work from home?"
+print(f"\nQuestion: {user_question}")
+
+response = rag_chain.invoke(user_question)
+print(f"Answer: {response.content}")
