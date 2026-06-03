@@ -9,3 +9,9 @@ from langchain_core.runnables import RunnablePassthrough
 
 # Load environment variables from the .env file
 load_dotenv()
+
+print("Loading PDF document...")
+loader = PyPDFLoader("TechCorp_Official_Employee_Handbook.pdf")
+document = loader.load()
+
+print(document[0].page_content)
