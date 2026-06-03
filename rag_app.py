@@ -15,3 +15,29 @@ loader = PyPDFLoader("TechCorp_Official_Employee_Handbook.pdf")
 document = loader.load()
 
 print(document[0].page_content)
+
+print("Chunking text...")
+text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=500,
+                chunk_overlap=50
+                )
+chunks = text_splitter.split_documents(document)
+
+print(chunks[0].page_content)
+
+# Configure the database to act as a document retriever
+retriever = vector_db.as_retriever(search_kwargs={"k": 2})
+
+# Define the hidden prompt structure for the LLM
+template = """
+Use the following pieces of retrieved context to answer the question. 
+If you don't know the answer, just say that you don't know. 
+Use three sentences maximum and keep the answer concise.
+
+Context: {context}
+
+Question: {question}
+
+Answer:
+    """
+    prompt = PromptTemplate.from_template(template)
