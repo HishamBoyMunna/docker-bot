@@ -41,3 +41,17 @@ Question: {question}
 Answer:
     """
     prompt = PromptTemplate.from_template(template)
+
+# Initialize the free Gemini model tier
+llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0)
+
+# Helper function to stitch retrieved chunks into a single text block
+def format_docs(docs):
+        return "\n\n".join(doc.page_content for doc in docs)
+
+    # Connect everything together using LangChain Expression Language (LCEL)
+    rag_chain = (
+                {"context": retriever | format_docs, "question": RunnablePassthrough()}
+                    | prompt
+                        | llm
+                        )
